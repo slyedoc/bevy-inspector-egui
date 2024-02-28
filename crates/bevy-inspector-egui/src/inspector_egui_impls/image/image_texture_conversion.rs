@@ -201,6 +201,7 @@ pub fn try_into_dynamic(image: &Image) -> Option<(DynamicImage, bool)> {
             )?),
             false,
         ),
+<<<<<<< HEAD
         TextureFormat::R8Uint => {
             let width = image.texture_descriptor.size.width;
             let height = image.texture_descriptor.size.height;
@@ -216,10 +217,16 @@ pub fn try_into_dynamic(image: &Image) -> Option<(DynamicImage, bool)> {
         }
         TextureFormat::R32Float => {
             let f32_data: Vec<f32> = bevy_core::cast_slice(&image.data).to_owned();
+=======
+        TextureFormat::R32Float => {
+            
+            let f32_data: Vec<f32> =  bevy_core::cast_slice(&image.data).to_owned();           
+>>>>>>> 83dd252 (Image format (#7))
 
             //let f32_data =  convert_bytes_to_f32(&image.data);
             let width = image.texture_descriptor.size.width;
             let height = image.texture_descriptor.size.height;
+<<<<<<< HEAD
 
             let mut imgbuf = ImageBuffer::<image::Rgba<u8>, Vec<u8>>::new(width, height);
 
@@ -233,6 +240,20 @@ pub fn try_into_dynamic(image: &Image) -> Option<(DynamicImage, bool)> {
                 let (green, red) = if normalized_value > 0.0 {
                     // Positive values: Map to red, scale intensity by normalized value
                     (normalized_value * 255.0, 0.0)
+=======
+        
+            let mut imgbuf = ImageBuffer::<image::Rgba<u8>, Vec<u8>>::new(width, height);
+        
+            for (x, y, pixel) in imgbuf.enumerate_pixels_mut() {
+                let data_index = (y * width + x) as usize;
+                let value = f32_data[data_index];
+                
+                // Assign colors based on sign
+                let normalized_value = value.clamp(-1.0, 1.0);
+                let (red, green) = if normalized_value > 0.0 {
+                    // Positive values: Map to red, scale intensity by normalized value
+                    (normalized_value * 255.0, 0.0) 
+>>>>>>> 83dd252 (Image format (#7))
                 } else {
                     // Negative values: Map to green, scale intensity by absolute value of normalized value
                     (0.0, normalized_value.abs() * 255.0)
@@ -240,13 +261,32 @@ pub fn try_into_dynamic(image: &Image) -> Option<(DynamicImage, bool)> {
 
                 *pixel = Rgba([red as u8, green as u8, 0, 255]);
             }
+<<<<<<< HEAD
             (DynamicImage::ImageRgba8(imgbuf), false)
+=======
+            ( DynamicImage::ImageRgba8(imgbuf), false)
+>>>>>>> 83dd252 (Image format (#7))
         }
         v @ _ => {
             // TODO: remove repeating error, but useful for now
             warn!("Unsupported texture format, {:?}", v);
             return None;
+<<<<<<< HEAD
         }
+=======
+        },
+>>>>>>> 83dd252 (Image format (#7))
     };
     Some((image, is_srgb))
+}
+
+fn convert_bytes_to_f32(bytes: &[u8]) -> Vec<f32> {
+    // Ensure the bytes length is a multiple of 4 for safe conversion to f32
+    assert!(bytes.len() % 4 == 0, "Data length is not aligned for f32 conversion");
+
+    // SAFETY: We've ensured alignment and size correctness above.
+    // The caller must ensure that the byte slice's lifetime is valid for the conversion.
+    unsafe {
+        std::slice::from_raw_parts(bytes.as_ptr() as *const f32, bytes.len() / 4).to_vec()
+    }
 }
