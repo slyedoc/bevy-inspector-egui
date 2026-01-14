@@ -1,4 +1,4 @@
-use bevy_reflect::{TypeData, TypeInfo, TypeRegistry};
+use bevy_reflect::{TypeData, TypeInfo, TypeRegistry, enums::VariantInfo};
 
 use crate::{
     InspectorOptions,
@@ -53,9 +53,9 @@ fn insert_options_enum<T: 'static>(
             };
             let variant_index = info.index_of(variant).unwrap();
             let field_index = match info.variant_at(variant_index).unwrap() {
-                bevy_reflect::VariantInfo::Struct(strukt) => strukt.index_of(field).unwrap(),
-                bevy_reflect::VariantInfo::Tuple(_) => field.parse().unwrap(),
-                bevy_reflect::VariantInfo::Unit(_) => unreachable!(),
+                VariantInfo::Struct(strukt) => strukt.index_of(field).unwrap(),
+                VariantInfo::Tuple(_) => field.parse().unwrap(),
+                VariantInfo::Unit(_) => unreachable!(),
             };
             options.insert_boxed(
                 Target::VariantField {
