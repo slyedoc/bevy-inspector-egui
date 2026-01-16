@@ -98,7 +98,7 @@ bevy = { git = "https://github.com/bevyengine/bevy", branch = "main", default-fe
 ] }
 bevy_math = { git = "https://github.com/bevyengine/bevy", branch = "main", features = ["mint"] }
 egui_dock = { git = "https://github.com/Avarel/egui_dock", branch = "egui_0.33" }
-transform-gizmo-bevy = { git = "https://github.com/pindash-io/transform-gizmo", branch = "bevy-0.17" }
+# transform-gizmo-bevy = { git = "https://github.com/pindash-io/transform-gizmo", branch = "bevy-0.17" } # Disabled: needs bevy-main update
 # bevy_mod_picking = { git = "https://github.com/aevyrie/bevy_mod_picking", rev = "554649a951689dce66d0d759839b326874e8826f", default-features = false, features = ["backend_raycast", "backend_egui", "backend_sprite"] }
 # bevy_framepace = "0.11"
 
@@ -139,9 +139,9 @@ path = "examples/quick/world_inspector_assets.rs"
 name = "state_inspector"
 path = "examples/quick/state_inspector.rs"
 
-[[example]]
-name = "egui_dock"
-path = "examples/integrations/egui_dock.rs"
+# [[example]]
+# name = "egui_dock"
+# path = "examples/integrations/egui_dock.rs"  # Disabled: needs transform-gizmo-bevy bevy-main update
 
 [[example]]
 name = "side_panel"
